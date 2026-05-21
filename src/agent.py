@@ -1,8 +1,11 @@
 from langchain.agents import create_agent
 from prompts import SYSTEM_PROMPT
+from langchain_ollama import ChatOllama
+
+model = ChatOllama(model="gemma3", temperature=0)
 
 agent = create_agent(
-    model="ollama:gemma3",
+    model=model,
     system_prompt=SYSTEM_PROMPT
 )
 
