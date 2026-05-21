@@ -1,8 +1,9 @@
 from langchain.agents import create_agent
+from prompts import SYSTEM_PROMPT
 
 agent = create_agent(
     model="ollama:gemma3",
-    system_prompt="Answer simply and give concise short answers. straight to the point."
+    system_prompt=SYSTEM_PROMPT
 )
 
 def ask_question(msg: str) -> str:
