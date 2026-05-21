@@ -1,6 +1,4 @@
-from langchain import messages
 from langchain.agents import create_agent
-from langchain_core.messages.ai import AIMessage
 
 agent = create_agent(
     model="ollama:gemma3",
