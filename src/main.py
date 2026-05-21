@@ -2,7 +2,8 @@ from agent import ask_question
 from ingest import load_document
 
 def main() -> None:
-    load_document("names.pdf")
+    text = load_document("test.txt")
+    print(text)
 """
     question: str = input("Question: ")
     answer: str = ask_question(question)
