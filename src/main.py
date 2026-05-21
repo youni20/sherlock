@@ -1,12 +1,13 @@
 from agent import ask_question
-from pathlib import Path
-
-DATA_COLLECTION = Path("case_files")
+from ingest import load_document
 
 def main() -> None:
+    load_document("names.pdf")
+"""
     question: str = input("Question: ")
     answer: str = ask_question(question)
     print(answer)
+"""
 
 if __name__ == "__main__":
     main()
