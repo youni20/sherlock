@@ -3,6 +3,7 @@ from ingest import load_document
 
 def main() -> None:
     text = load_document("test.txt")
+    print(f"Character count: {len(text)}")
     print(text)
 """
     question: str = input("Question: ")

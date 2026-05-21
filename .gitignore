@@ -11,5 +11,3 @@ wheels/
 
 # Environment Variables
 .env
-
-/case_files
