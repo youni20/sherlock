@@ -1,6 +1,7 @@
 from pypdf import PdfReader
 from pathlib import Path
 
+
 DATA_COLLECTION: Path = Path("case_files")
 
 def load_document(file_name: str) -> str:
