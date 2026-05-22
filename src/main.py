@@ -9,7 +9,7 @@ import os
 def main() -> None:
     load_dotenv()
     all_chunkz: list[str] = []
-    for root, dir, files in os.walk(DATA_COLLECTION):
+    for root, dir, files in os.walk(DATA_COLLECTION):  # Iterate through all files in a directory including in sub-directories
         for file in files:
             file_path = os.path.relpath(os.path.join(root, file), DATA_COLLECTION)
             text = load_document(file_path)
