@@ -1,7 +1,7 @@
 from langchain_core.documents.base import Document
 from langchain_core.vectorstores.base import VectorStoreRetriever
 from langchain_ollama import OllamaEmbeddings
-from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_core.vectorstores import VectorStore
 
 #  Initialise the embedding model
 embedding_model: OllamaEmbeddings = OllamaEmbeddings(
@@ -9,12 +9,7 @@ embedding_model: OllamaEmbeddings = OllamaEmbeddings(
     dimensions=768
 )
 
-
-#  Split store vector into 2 functions one to store it and one to query it 
-def build_vector_store(chunks: list[str]) -> InMemoryVectorStore:
-    return InMemoryVectorStore.from_texts(chunks, embedding=embedding_model)
-
-def retrive_context(vector_store: InMemoryVectorStore, question: str) -> str:
+def retrive_context(vector_store: VectorStore, question: str) -> str:
     retriever: VectorStoreRetriever = vector_store.as_retriever()
     retrieved_documents: list[Document] = retriever.invoke(question)
     chunks: list[str] = []
@@ -22,7 +17,15 @@ def retrive_context(vector_store: InMemoryVectorStore, question: str) -> str:
         chunks.append(doc.page_content)
 
     return "\n\n".join(chunks)
-    
+
+
+
+'''
+#  No longer needed as we got persisitent storage with chroma db now
+#  Split store vector into 2 functions one to store it and one to query it 
+def build_vector_store(chunks: list[str]) -> InMemoryVectorStore:
+    return InMemoryVectorStore.from_texts(chunks, embedding=embedding_model)
+'''    
 
 '''
 #  Define method to store the chunks (for now in memory ill make a dir for it later)
