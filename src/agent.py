@@ -11,7 +11,8 @@ agent: Runnable = create_agent(
     system_prompt=SYSTEM_PROMPT
 )
 
-def ask_question(msg: str) -> str:
-    result: dict = agent.invoke({"messages": [{"role": "user", "content": msg}]})
+def ask_question(msg: str, context: str) -> str:
+    prompt: str = f"Answer only using the following context:\n\n{context}\n\nQuestion: {msg}"
+    result: dict = agent.invoke({"messages": [{"role": "user", "content": prompt}]})
     response: str = result["messages"][-1].content
     return response
