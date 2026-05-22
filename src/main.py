@@ -23,10 +23,16 @@ def main() -> None:
     
     # print(f"Character count: {len(text)}")
 
-    question: str = input("Question: ")
-    docs: str = retrive_context(vector_store=vector_store, question=question)
-    answer: str = ask_question(question, docs)
-    print(answer)
+    running: bool = True
+
+    while(running):
+        question: str = input("Question: ")
+        if question == "/exit":
+            running = False
+            break
+        docs: str = retrive_context(vector_store=vector_store, question=question)
+        answer: str = ask_question(question, docs)
+        print(answer)
 
     
 if __name__ == "__main__":
