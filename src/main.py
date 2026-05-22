@@ -8,11 +8,15 @@ import os
 
 def main() -> None:
     load_dotenv()
+    all_chunkz: list[str] = []
     for root, dir, files in os.walk(DATA_COLLECTION):
         for file in files:
-            text = load_document(file)
+            file_path = os.path.relpath(os.path.join(root, file), DATA_COLLECTION)
+            text = load_document(file_path)
             chunks_list = split_text(document=text)
-            vector_store = build_vector_store(chunks=chunks_list)
+            all_chunkz.extend(chunks_list)
+            
+    vector_store = build_vector_store(chunks=all_chunkz)
     
     # print(f"Character count: {len(text)}")
 
