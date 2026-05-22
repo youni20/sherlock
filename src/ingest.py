@@ -10,7 +10,7 @@ def load_document(file_name: str) -> str:
     if not file_path.exists():
         raise FileNotFoundError("Error invalid file path")
         
-    if file_name.endswith(".pdf"):
+    if file_name.endswith(".pdf"):  # If file is a pdf file
         try:
             reader: PdfReader = PdfReader(file_path)
             text: str = ""
@@ -20,7 +20,7 @@ def load_document(file_name: str) -> str:
             raise RuntimeError(f"Failed to parse PDF: {file_name}") from e
         return text
             
-    if file_name.endswith(".txt"):
+    if file_name.endswith(".txt"):  # If file is a text file
         try:
             with open(file_path, "r", encoding="utf-8") as file:
                 file_content: str = file.read()
