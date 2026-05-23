@@ -1,21 +1,26 @@
 import pytest
 
-from src.agent import ask_question
-from src.ingest import load_document
+from agent import ask_question
+from ingest import load_document
+from chunker import split_text
+from vector_store import vector_store
+from embedding import retrive_context
 
 #  Exact sentence when evidence is mising
 ABSTENTION: str = "I don't have enough evidence to answer that."
 
 CASE_FILES: list[str] = [
-    "case_files/case_001_thornfield_manor.txt",
-    "case_files/case_002_finch_disappearance.txt",
-    "case_files/case_003_blackwood_estate.pdf",
+    "txt_files/case_001_thornfield_manor.txt",
+    "txt_files/case_002_finch_disappearance.txt",
+    "pdf_files/case_003_blackwood_estate.pdf",
 ]
 
 @pytest.fixture(scope="session", autouse=True)
 def knowledge_base():  # Ingest all three case files once before the test session
     for file in CASE_FILES:
-        load_document(file)
+        text = load_document(file)
+        chunks = split_text(text)
+        vector_store.add_texts(chunks)
 
 
 #  Questions that should be answerable and based of case 001
@@ -53,3 +58,15 @@ ANSWERABLE_CASES = [
     ),
 ]
 
+
+@pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
+def test_answerable_questions(question, keywords):
+    """The answer must contain every expected keyword (case-insensitive)."""
+    context = retrive_context(vector_store, question)
+    answer = ask_question(question, context)
+    lowered = answer.lower()
+    for keyword in keywords:
+        assert keyword.lower() in lowered, (
+            f"Expected '{keyword}' in answer to '{question}'.\n"
+            f"Got: {answer!r}"
+        )
