@@ -5,7 +5,7 @@ from langchain_core.vectorstores import VectorStore
 
 #  Initialise the embedding model
 embedding_model: OllamaEmbeddings = OllamaEmbeddings(
-    model="embeddinggemma:latest",
+    model="mxbai-embed-large:latest",
     dimensions=768
 )
 
