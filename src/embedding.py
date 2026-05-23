@@ -1,12 +1,13 @@
 from langchain_core.documents.base import Document
 from langchain_core.vectorstores.base import VectorStoreRetriever
-from langchain_ollama import OllamaEmbeddings
+# from langchain_ollama import OllamaEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_core.vectorstores import VectorStore
 
 #  Initialise the embedding model
-embedding_model: OllamaEmbeddings = OllamaEmbeddings(
-    model="mxbai-embed-large:latest",
-    dimensions=768
+embedding_model: GoogleGenerativeAIEmbeddings = GoogleGenerativeAIEmbeddings(
+    model="models/gemini-embedding-001",
+    # output_dimensionality=768,
 )
 
 def retrive_context(vector_store: VectorStore, question: str) -> str:

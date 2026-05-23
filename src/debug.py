@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from embedding import retrive_context
 from vector_store import vector_store
 

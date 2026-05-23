@@ -1,8 +1,11 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from agent import ask_question
 from embedding import retrive_context
 from chunker import split_text
 from ingest import load_document, DATA_COLLECTION
-from dotenv import load_dotenv
+
 import hashlib
 import os
 
@@ -10,7 +13,6 @@ from vector_store import vector_store
 
 
 def main() -> None:
-    load_dotenv()
     if not vector_store.get()['ids']:  # To avoid rembedding anything thats already embedded
         all_chunkz: list[str] = []
         for root, dir, files in os.walk(DATA_COLLECTION):  # Iterate through all files in a directory including in sub-directories
