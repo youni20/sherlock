@@ -27,7 +27,7 @@ def main() -> None:
 
     while(running):
         question: str = input("Question: ")
-        if question == "/exit":
+        if (question == "/exit"):
             running = False
             break
         docs: str = retrive_context(vector_store=vector_store, question=question)
