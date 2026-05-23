@@ -3,6 +3,7 @@ from embedding import retrive_context
 from chunker import split_text
 from ingest import load_document, DATA_COLLECTION
 from dotenv import load_dotenv
+import hashlib
 import os
 
 from vector_store import vector_store
@@ -19,7 +20,9 @@ def main() -> None:
                 chunks_list = split_text(document=text)
                 all_chunkz.extend(chunks_list)
             
-        vector_store.add_texts(all_chunkz)
+        ids: list[str] = [hashlib.sha256(c.encode()).hexdigest() for c in all_chunkz]  # Hash function where same input always gives same output
+        # print(ids)
+        vector_store.add_texts(all_chunkz, ids=ids)
     
     # print(f"Character count: {len(text)}")
 
