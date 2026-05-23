@@ -6,6 +6,7 @@ from chunker import split_text
 from vector_store import vector_store
 from embedding import retrive_context
 
+
 #  Exact sentence when evidence is mising
 ABSTENTION: str = "I don't have enough evidence to answer that."
 
@@ -17,6 +18,9 @@ CASE_FILES: list[str] = [
 
 @pytest.fixture(scope="session", autouse=True)
 def knowledge_base():  # Ingest all three case files once before the test session
+    existing_ids = vector_store.get()["ids"]
+    if existing_ids:
+        vector_store.delete(existing_ids)
     for file in CASE_FILES:
         text = load_document(file)
         chunks = split_text(text)
@@ -59,6 +63,14 @@ ANSWERABLE_CASES = [
 ]
 
 
+ABSTENTION_CASES = [
+    "Did the butler have a motive?",
+    "Who had a key to the study drawer?",
+    "Who started the fire at the Blackwood Estate?",
+    "Who poisoned the wine at the dinner party?",
+]
+
+
 @pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
 def test_answerable_questions(question, keywords):
     """The answer must contain every expected keyword (case-insensitive)."""
@@ -70,3 +82,26 @@ def test_answerable_questions(question, keywords):
             f"Expected '{keyword}' in answer to '{question}'.\n"
             f"Got: {answer!r}"
         )
+
+
+@pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
+def test_answerable_questions_do_not_abstain(question, keywords):
+    """Answerable questions must not trigger the abstention response."""
+    context = retrive_context(vector_store, question)
+    answer = ask_question(question, context)
+    assert ABSTENTION not in answer, (
+        f"Expected a real answer but got abstention for '{question}'.\n"
+        f"Got: {answer!r}"
+    )
+
+
+@pytest.mark.parametrize("question", ABSTENTION_CASES)
+def test_abstention_questions(question):
+    """When evidence is absent the system must return the exact abstention sentence."""
+    context = retrive_context(vector_store, question)
+    answer = ask_question(question, context)
+    assert answer.strip() == ABSTENTION, (
+        f"Expected the exact abstention sentence for '{question}'.\n"
+        f"Expected: {ABSTENTION!r}\n"
+        f"Got:      {answer!r}"
+    )
