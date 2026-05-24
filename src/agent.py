@@ -2,10 +2,10 @@ from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
 from langgraph.pregel.main import Runnable
 from prompts import SYSTEM_PROMPT
-#  from langchain_ollama import ChatOllama
+from langchain_ollama import ChatOllama
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-model: BaseChatModel = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0)
+model: BaseChatModel = ChatOllama(model="qwen2.5:1.5b", temperature=0)  # qwen2.5:1.5b  # gemini-2.5-flash-lite
 
 agent: Runnable = create_agent(
     model=model,
