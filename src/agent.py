@@ -5,7 +5,7 @@ from prompts import SYSTEM_PROMPT
 from langchain_ollama import ChatOllama
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-model: BaseChatModel = ChatOllama(model="qwen2.5:1.5b", temperature=0)  # qwen2.5:1.5b  # gemini-2.5-flash-lite
+model: BaseChatModel = ChatOllama(model="qwen2.5:3b", temperature=0)  # qwen2.5:3b  # gemini-2.5-flash-lite
 
 agent: Runnable = create_agent(
     model=model,
