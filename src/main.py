@@ -1,4 +1,5 @@
-from system import run_system
+from system import bootstrap_knowledge_base, run_cli
 
 if __name__ == "__main__":
-    run_system()
+    bootstrap_knowledge_base()
+    run_cli()

@@ -9,19 +9,22 @@ import hashlib
 import os
 
 
-def run_system() -> None:
-    if not vector_store.get()['ids']:  # To avoid rembedding anything thats already embedded
-        all_chunkz: list[str] = []
-        for root, dir, files in os.walk(DATA_COLLECTION):  # Iterate through all files in a directory including in sub-directories
-            for file in files:
-                file_path = os.path.relpath(os.path.join(root, file), DATA_COLLECTION)
-                text = load_document(file_path)
-                chunks_list = split_text(document=text)
-                all_chunkz.extend(chunks_list)
-            
-        ids: list[str] = [hashlib.sha256(c.encode()).hexdigest() for c in all_chunkz]  # Hash function where same input always gives same output
-        vector_store.add_texts(all_chunkz, ids=ids)
+def bootstrap_knowledge_base() -> None:  # Embeds whatever hasnt been embedded yet
+    all_chunkz: list[str] = []
+    all_metadatas: list[dict] = []
+    for root, dir, files in os.walk(DATA_COLLECTION):  # Iterate through all files in a directory including in sub-directories
+        for file in files:
+            file_path = os.path.relpath(os.path.join(root, file), DATA_COLLECTION)
+            text = load_document(file_path)
+            chunks_list = split_text(document=text)
+            all_chunkz.extend(chunks_list)
+            all_metadatas.extend([{"source": file}] * len(chunks_list))  # Tag each chunk with the filename it came from
 
+    ids: list[str] = [hashlib.sha256(c.encode()).hexdigest() for c in all_chunkz]  # Same chunk content -> same hash -> Chroma deduplicates on update and insert
+    vector_store.add_texts(all_chunkz, metadatas=all_metadatas, ids=ids)
+
+
+def run_cli() -> None:
     running: bool = True
 
     while(running):
