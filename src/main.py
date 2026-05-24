@@ -23,10 +23,7 @@ def main() -> None:
                 all_chunkz.extend(chunks_list)
             
         ids: list[str] = [hashlib.sha256(c.encode()).hexdigest() for c in all_chunkz]  # Hash function where same input always gives same output
-        # print(ids)
         vector_store.add_texts(all_chunkz, ids=ids)
-    
-    # print(f"Character count: {len(text)}")
 
     running: bool = True
 
@@ -36,7 +33,6 @@ def main() -> None:
             running = False
             break
         docs: str = retrive_context(vector_store=vector_store, question=question)
-        # print(f"\n retrieved context for {question!r}: \n{docs}\n")
         answer: str = ask_question(question, docs)
         print(answer)
 

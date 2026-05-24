@@ -14,3 +14,6 @@ wheels/
 
 # The vector db content
 chroma_vector_store/*
+
+# Pytest
+.pytest_cache/
