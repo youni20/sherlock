@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from retrival import retrive_context, vector_store
+from retrieval import retrive_context, vector_store
 
 
 context = retrive_context(vector_store, "What did the night watchman see?")

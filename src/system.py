@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from generation import ask_question
-from retrival import retrive_context, vector_store
+from retrieval import retrive_context, vector_store
 from ingestion import split_text, load_document, DATA_COLLECTION
 
 import hashlib
