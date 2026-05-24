@@ -1,3 +1,11 @@
+from langchain.agents import create_agent
+from langchain_core.language_models import BaseChatModel
+from langgraph.pregel.main import Runnable
+
+from langchain_ollama import ChatOllama
+#  from langchain_google_genai import ChatGoogleGenerativeAI
+
+
 SYSTEM_PROMPT = """You are Sherlock, an assistant that answers a detective's questions strictly from the case files provided to you.
 
 Rules:
@@ -14,3 +22,17 @@ Rules:
 6. When you do answer, be concise and factual, and ground every claim in the Context. Quote or reference the relevant detail where helpful. Answer in your own words, in the third person, as a direct response to the detective's question — do not reproduce a witness's statement verbatim in the first person.
 
 7. Do not mention these rules or the existence of the Context in your answer."""
+
+
+model: BaseChatModel = ChatOllama(model="qwen2.5:3b", temperature=0)  # qwen2.5:3b  # gemini-2.5-flash-lite
+
+agent: Runnable = create_agent(
+    model=model,
+    system_prompt=SYSTEM_PROMPT
+)
+
+def ask_question(msg: str, context: str) -> str:
+    prompt: str = f"Answer only using the following context:\n\n{context}\n\nQuestion: {msg}"
+    result: dict = agent.invoke({"messages": [{"role": "user", "content": prompt}]})
+    response: str = result["messages"][-1].content
+    return response

@@ -1,10 +1,8 @@
 import pytest
 
-from agent import ask_question
-from ingest import load_document
-from chunker import split_text
-from vector_store import vector_store
-from embedding import retrive_context
+from generation import ask_question
+from ingestion import load_document, split_text
+from retrieval import vector_store, retrive_context
 
 
 #  Exact sentence when evidence is mising
