@@ -9,10 +9,35 @@
         <h1>
             Welcome, Please Enter Your Question
         </h1>
-        <form action="http://localhost:8080/get_question">
+
+        
+<!-- Logic for submiting questions -->        
+        <form id="question_form" action="http://localhost:8080/get_question">
             <label for="question">Question:</label>
             <input type="text" id="question" name="question" placeholder="type '/exit' to close the program">
             <button type="submit">Ask</button>
         </form>
+
+        
+<!-- Logic for uploading files -->
+        <form id="upload_file">
+            <input type="file" id="file_upload" name="file">
+            <button type="submit">Upload Document</button>
+        </form>
+
+        <script>
+        document.getElementById("upload_file").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const data = new FormData();
+          data.append("file", document.getElementById("file_upload").files[0]);
+
+          const response = await fetch("/ingest_file", {
+            method: "POST",
+            body: data,
+          })
+          console.log(await response.json());
+        });
+        </script>
+
     </body>
 </html>
