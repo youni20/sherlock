@@ -9,6 +9,10 @@ app: FastAPI = FastAPI()
 def home() -> FileResponse:
     return FileResponse("src/static/index.html")
 
+@app.get("/get_question")
+def get_question(question: str) -> str:
+    print(question)
+    return(f"Question: {question}")
 
 if __name__ == "__main__":
     uvicorn.run(app='main:app', port=8080, reload=True)
