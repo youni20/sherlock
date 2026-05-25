@@ -12,11 +12,24 @@
 
         
 <!-- Logic for submiting questions -->        
-        <form id="question_form" action="http://localhost:8080/get_question">
+        <div id="chat_box"></div>
+
+        <form id="question_form">
             <label for="question">Question:</label>
             <input type="text" id="question" name="question" placeholder="type '/exit' to close the program">
             <button type="submit">Ask</button>
         </form>
+
+        <script>
+        document.getElementById("question_form").addEventListener("submit", (e) => {
+          e.preventDefault();
+          const question = document.getElementById("question").value.trim();
+          if (!question) return;
+          const msg = document.createElement("p");
+          msg.textContent = `You: ${question}`;
+          document.getElementById("chat_box").appendChild(msg);
+        });
+        </script>
 
         
 <!-- Logic for uploading files -->
