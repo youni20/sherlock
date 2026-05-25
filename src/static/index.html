@@ -29,7 +29,7 @@
           document.getElementById("chat_box").innerHTML += `<p>You: ${question}</p>`;
           document.getElementById("question_form").reset();
 
-          const response = await fetch(`/get_answer/${question}`, { method: "POST" });
+          const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question }) });
           const data = await response.json();
           document.getElementById("chat_box").innerHTML += `<p>Agent: ${data.answer} (Source: ${data.sources})</p>`;
         });

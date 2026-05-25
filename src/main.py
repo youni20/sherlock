@@ -1,12 +1,16 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 from retrieval import retrieve_context_with_sources, vector_store
 from system import bootstrap_knowledge_base
-from ingestion import DATA_COLLECTION 
+from ingestion import DATA_COLLECTION
 from generation import ask_question
 
 import uvicorn
+
+class QuestionRequest(BaseModel):
+    question: str
 
 # from system import run_cli
 
@@ -15,11 +19,6 @@ app: FastAPI = FastAPI()
 @app.get("/", response_class=FileResponse)
 def home() -> FileResponse:
     return FileResponse("src/static/index.html")
-
-@app.get("/get_question")
-def get_question(question: str) -> str:
-    print(question)
-    return(f"Question: {question}")
 
 @app.post("/ingest_file")
 async def upload_file(file: UploadFile = File(...)):
@@ -37,11 +36,10 @@ async def upload_file(file: UploadFile = File(...)):
         "saved_at": DATA_COLLECTION
     }
 
-@app.post("/get_answer/{question}")
-def get_answer(question: str) -> dict:
-    docs, sources = retrieve_context_with_sources(vector_store=vector_store, question=question)
-    answer: str = ask_question(question, docs)
-    print("Question Asked")
+@app.post("/get_answer")
+def get_answer(body: QuestionRequest) -> dict:
+    docs, sources = retrieve_context_with_sources(vector_store=vector_store, question=body.question)
+    answer: str = ask_question(body.question, docs)
     return {"answer": answer, "sources": sources}
 
 
