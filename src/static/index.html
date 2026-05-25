@@ -31,7 +31,7 @@
 
           const response = await fetch(`/get_answer/${question}`, { method: "POST" });
           const data = await response.json();
-          document.getElementById("chat_box").innerHTML += `<p>Agent: ${data.answer}</p>`;
+          document.getElementById("chat_box").innerHTML += `<p>Agent: ${data.answer} (Source: ${data.sources})</p>`;
         });
         </script>
 
