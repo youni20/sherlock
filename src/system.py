@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from generation import ask_question
-from retrieval import retrive_context, vector_store
+from retrieval import retrive_context, vector_store, retrieve_context_with_sources
 from ingestion import split_text, load_document, DATA_COLLECTION
 
 import hashlib
@@ -32,6 +32,8 @@ def run_cli() -> None:
         if (question == "/exit"):
             running = False
             break
-        docs: str = retrive_context(vector_store=vector_store, question=question)
+        #  docs: str = retrive_context(vector_store=vector_store, question=question)
+        docs, sources = retrieve_context_with_sources(vector_store=vector_store, question=question)
         answer: str = ask_question(question, docs)
-        print(answer)
+        print(f"response: {answer}")
+        print(f"sources: {sources}")

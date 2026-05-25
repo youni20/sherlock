@@ -9,6 +9,7 @@ print(context)
 
 all_chunks = vector_store.get()
 print(f"Total chunks in store: {len(all_chunks['ids'])}")
-for doc in all_chunks['documents']:
+for doc, meta in zip(all_chunks['documents'], all_chunks['metadatas']):
+    print(f"source: {meta}")
     print(doc[:80])
     print("---")

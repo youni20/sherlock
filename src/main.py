@@ -2,10 +2,14 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
 from pydantic_core.core_schema import BoolSchema
 
+from retrieval import retrive_context, retrieve_context_with_sources, vector_store
 from system import bootstrap_knowledge_base
 from ingestion import DATA_COLLECTION 
+from generation import ask_question
 
 import uvicorn
+
+from system import run_cli
 
 app: FastAPI = FastAPI()
 
@@ -37,6 +41,15 @@ async def upload_file(file: UploadFile = File(...)):
     }
 
 
+@app.post("/get_answer/{question}")
+def get_answer(question: str) -> dict:
+    docs, sources = retrieve_context_with_sources(vector_store=vector_store, question=question)
+    answer: str = ask_question(question, docs)
+    return {"answer": answer, "sources": sources}
+
+
 
 if __name__ == "__main__":
-    uvicorn.run(app='main:app', port=8080, reload=True)
+    #uvicorn.run(app='main:app', port=8080, reload=True)
+    bootstrap_knowledge_base()
+    run_cli()
