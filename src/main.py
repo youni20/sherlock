@@ -1,6 +1,8 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
+from pydantic_core.core_schema import BoolSchema
 
+from system import bootstrap_knowledge_base
 from ingestion import DATA_COLLECTION 
 
 import uvicorn
@@ -10,6 +12,7 @@ app: FastAPI = FastAPI()
 @app.get("/", response_class=FileResponse)
 def home() -> FileResponse:
     return FileResponse("src/static/index.html")
+
 
 @app.get("/get_question")
 def get_question(question: str) -> str:
@@ -23,6 +26,10 @@ async def upload_file(file: UploadFile = File(...)):
         content = await file.read()
         f.write(content)
         print("Added File")
+
+    bootstrap_knowledge_base()
+    print("Embedded File")
+    
     return{
         "filename": file.filename,
         "content_type": file.content_type,
@@ -30,7 +37,6 @@ async def upload_file(file: UploadFile = File(...)):
     }
 
 
+
 if __name__ == "__main__":
     uvicorn.run(app='main:app', port=8080, reload=True)
-    # bootstrap_knowledge_base()
-    # run_cli()
