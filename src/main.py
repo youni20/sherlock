@@ -1,14 +1,15 @@
-from doctest import debug
-
-from system import bootstrap_knowledge_base, run_cli
 from fastapi import FastAPI
+
+from fastapi.responses import FileResponse
+from fastapi.templating import Jinja2Templates
+
 import uvicorn
 
 app: FastAPI = FastAPI()
 
-@app.get("/")
-def home() -> str:
-    return "Home Page"
+@app.get("/", response_class=FileResponse)
+def home() -> FileResponse:
+    return FileResponse("src/static/index.html")
 
 
 if __name__ == "__main__":
