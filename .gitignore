@@ -17,6 +17,7 @@ chroma_vector_store/*
 
 # Pytest
 .pytest_cache/
+case_files/test_case.txt
 
 # Markdown file so i can write plan out my work and what tasks to do
 TODO.md
