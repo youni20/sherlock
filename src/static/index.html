@@ -39,6 +39,7 @@
         <form id="upload_file">
             <input type="file" id="file_upload" name="file">
             <button type="submit">Upload Document</button>
+            <progress id="upload_progress" hidden></progress>
         </form>
 
         <button class="btn-ghost" onclick="if(confirm('Are you sure? This will delete all the case files')) fetch('/delete_files', { method: 'DELETE' })">Delete All Files</button>

@@ -99,29 +99,11 @@ document.getElementById("question_form").addEventListener("submit", (e) => {
     if (!isProcessing) processQueue();
 });
 
-document.getElementById("upload_file").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("file", document.getElementById("file_upload").files[0]);
-
-    const response = await fetch("/ingest_file", {
-        method: "POST",
-        body: data,
-    });
-    console.log(await response.json());
-});
-
 const menuToggle = document.getElementById("menu_toggle");
 const menuDrawer = document.getElementById("menu_drawer");
 const fileList = document.getElementById("file_list");
 
-menuToggle.addEventListener("click", async () => {
-    const opening = !menuDrawer.classList.contains("open");
-    menuDrawer.classList.toggle("open");
-    menuToggle.textContent = opening ? "✕" : "☰";
-
-    if (!opening) return;
-
+async function loadFiles() {
     const response = await fetch("/get_files");
     const files = await response.json();
     fileList.innerHTML = "";
@@ -137,4 +119,30 @@ menuToggle.addEventListener("click", async () => {
         fileItem.textContent = name;
         fileList.appendChild(fileItem);
     });
+}
+
+const uploadForm = document.getElementById("upload_file");
+const uploadProgress = document.getElementById("upload_progress");
+
+uploadForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const file = document.getElementById("file_upload").files[0];
+    if (!file) return;
+
+    const data = new FormData();
+    data.append("file", file);
+
+    uploadProgress.hidden = false;
+    await fetch("/ingest_file", { method: "POST", body: data });
+    uploadProgress.hidden = true;
+
+    uploadForm.reset();
+    loadFiles();
+});
+
+menuToggle.addEventListener("click", () => {
+    const opening = !menuDrawer.classList.contains("open");
+    menuDrawer.classList.toggle("open");
+    menuToggle.textContent = opening ? "✕" : "☰";
+    if (opening) loadFiles();
 });
