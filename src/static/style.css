@@ -4,4 +4,9 @@ body {
 
 h1 {
     color: #ffffff;
+    text-align: center;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 44px;
+    font-family: sans-serif;
 }
