@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
-/* Design References */
 :root {
     --black: #000000;
     --dark-iron: #181818;
@@ -16,10 +15,7 @@
     --body-font: system-ui, -apple-system, sans-serif;
 }
 
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
     background-color: var(--black);
@@ -56,58 +52,27 @@ button {
     letter-spacing: 0.15em;
     cursor: pointer;
 }
+button:hover { background-color: var(--gold-dark); }
+body > button { margin-top: 16px; }
 
-button:hover {
-    background-color: var(--gold-dark);
-}
-
-.btn-ghost {
-    background-color: transparent;
-    color: var(--white);
-    border: 1px solid var(--border-ghost);
-}
-
-.btn-ghost:hover {
-    background-color: var(--white);
-    color: var(--black);
-}
-
-body > button {
-    margin-top: 16px;
-}
+.btn-ghost { background-color: transparent; color: var(--white); border: 1px solid var(--border-ghost); }
+.btn-ghost:hover { background-color: var(--white); color: var(--black); }
 
 /* Chat layout */
-#chat_layout {
-    display: flex;
-    gap: 16px;
-    width: 100%;
-    max-width: 1100px;
-}
+#chat_layout { display: flex; gap: 16px; width: 100%; max-width: 1100px; }
 
-#queue_panel {
-    width: 240px;
-    flex-shrink: 0;
-    background-color: var(--dark-iron);
-    padding: 20px;
-}
+#queue_panel { width: 240px; flex-shrink: 0; background-color: var(--dark-iron); padding: 20px; }
 
-#queue_panel h2 {
+#queue_panel h2, #menu_drawer h2 {
     font-family: var(--display-font);
-    font-size: 16px;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     margin: 0 0 16px;
 }
+#queue_panel h2 { font-size: 16px; }
 
-#queue_list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+#queue_list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
 
 .queue_item {
     display: flex;
@@ -119,12 +84,7 @@ body > button {
     font-size: 13px;
     line-height: 1.4;
 }
-
-.queue_item span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+.queue_item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .queue_remove {
     background: transparent;
@@ -137,16 +97,13 @@ body > button {
     text-transform: none;
     flex-shrink: 0;
 }
-
-.queue_remove:hover {
-    background: transparent;
-    color: var(--gold);
-}
+.queue_remove:hover { background: transparent; color: var(--gold); }
 
 #chat_box {
     background-color: var(--charcoal);
     flex: 1;
-    min-height: 50vh;
+    height: 50vh;
+    overflow-y: auto;
     padding: 24px;
     font-size: 16px;
     line-height: 1.5;
@@ -156,23 +113,9 @@ body > button {
 }
 
 /* Messages */
-.msg {
-    margin: 0;
-    padding: 12px 16px;
-    max-width: 75%;
-    line-height: 1.5;
-}
-
-.msg.user {
-    align-self: flex-start;
-    background-color: var(--shadow);
-}
-
-.msg.agent {
-    align-self: flex-end;
-    background-color: var(--black);
-    border: 1px solid var(--border-faint);
-}
+.msg { margin: 0; padding: 12px 16px; max-width: 75%; line-height: 1.5; }
+.msg.user { align-self: flex-start; background-color: var(--shadow); }
+.msg.agent { align-self: flex-end; background-color: var(--black); border: 1px solid var(--border-faint); }
 
 .msg.loading::after {
     content: "...";
@@ -180,17 +123,17 @@ body > button {
     width: 3ch;
     margin-left: 4px;
     vertical-align: bottom;
-    animation: loading_dots 1.2s steps(3, jump-none) infinite;
+    animation: loading_dots 1.2s step-end infinite;
 }
-
 @keyframes loading_dots {
-    from { clip-path: inset(0 2ch 0 0); }
-    to   { clip-path: inset(0 0 0 0); }
+    0%   { clip-path: inset(0 2ch 0 0); }
+    33%  { clip-path: inset(0 1ch 0 0); }
+    66%  { clip-path: inset(0 0 0 0); }
+    100% { clip-path: inset(0 2ch 0 0); }
 }
 
 /* Forms */
-#question_form,
-#upload_file {
+#question_form, #upload_file {
     display: flex;
     gap: 16px;
     align-items: center;
@@ -198,13 +141,7 @@ body > button {
     max-width: 1100px;
     margin-top: 16px;
 }
-
-#question_form label {
-    font-size: 12px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
+#question_form label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; }
 
 #question_form input[type="text"] {
     flex: 1;
@@ -216,22 +153,10 @@ body > button {
     font-family: inherit;
     font-size: 16px;
 }
+#question_form input[type="text"]::placeholder { color: var(--border-ghost); }
+#question_form input[type="text"]:focus { outline: none; border-color: var(--gold); }
 
-#question_form input[type="text"]::placeholder {
-    color: var(--border-ghost);
-}
-
-#question_form input[type="text"]:focus {
-    outline: none;
-    border-color: var(--gold);
-}
-
-#upload_file input[type="file"] {
-    flex: 1;
-    color: var(--ash);
-    font-family: inherit;
-    font-size: 13px;
-}
+#upload_file input[type="file"] { flex: 1; color: var(--ash); font-family: inherit; font-size: 13px; }
 
 #upload_file input[type="file"]::file-selector-button {
     background-color: transparent;
@@ -247,11 +172,7 @@ body > button {
     margin-right: 16px;
     cursor: pointer;
 }
-
-#upload_file input[type="file"]::file-selector-button:hover {
-    background-color: var(--white);
-    color: var(--black);
-}
+#upload_file input[type="file"]::file-selector-button:hover { background-color: var(--white); color: var(--black); }
 
 /* Menu */
 #menu_toggle {
@@ -260,25 +181,15 @@ body > button {
     left: 16px;
     z-index: 1000;
     margin-top: 0;
-    background: transparent;
-    color: var(--white);
-    border: 1px solid var(--border-ghost);
     padding: 6px 14px;
     font-size: 18px;
     line-height: 1;
     letter-spacing: 0;
 }
 
-#menu_toggle:hover {
-    background-color: var(--white);
-    color: var(--black);
-}
-
 #menu_drawer {
     position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+    top: 0; left: 0; bottom: 0;
     width: 280px;
     background-color: var(--dark-iron);
     padding: 72px 24px 24px;
@@ -287,39 +198,9 @@ body > button {
     z-index: 900;
     overflow-y: auto;
 }
+#menu_drawer.open { transform: translateX(0); }
+#menu_drawer h2 { font-size: 18px; }
 
-#menu_drawer.open {
-    transform: translateX(0);
-}
-
-#menu_drawer h2 {
-    font-family: var(--display-font);
-    font-size: 18px;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin: 0 0 16px;
-}
-
-#file_list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-#file_list li {
-    background-color: var(--charcoal);
-    padding: 10px 12px;
-    font-size: 13px;
-    word-break: break-all;
-}
-
-#file_list li.empty {
-    background: transparent;
-    color: var(--ash);
-    padding: 0;
-    font-style: italic;
-}
+#file_list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+#file_list li { background-color: var(--charcoal); padding: 10px 12px; font-size: 13px; word-break: break-all; }
+#file_list li.empty { background: transparent; color: var(--ash); padding: 0; font-style: italic; }

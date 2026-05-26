@@ -55,7 +55,9 @@ function addMessage(text, role) {
     const bubble = document.createElement("p");
     bubble.className = `msg ${role}`;
     bubble.textContent = text;
-    document.getElementById("chat_box").appendChild(bubble);
+    const chatBox = document.getElementById("chat_box");
+    chatBox.appendChild(bubble);
+    chatBox.scrollTop = chatBox.scrollHeight;
     return bubble;
 }
 
