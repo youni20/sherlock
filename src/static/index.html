@@ -56,7 +56,10 @@
             document.getElementById("chat_box").appendChild(loading);
             const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: q }) });
             const data = await response.json();
-            loading.textContent = `Agent: ${data.answer} (Source: ${data.sources})`;
+            const noEvidence = "I don't have enough evidence to answer that.";
+            loading.textContent = data.answer === noEvidence
+              ? `Agent: ${data.answer}`
+              : `Agent: ${data.answer} (Source: ${data.sources})`;
           }
           isProcessing = false;
         }
