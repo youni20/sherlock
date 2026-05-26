@@ -9,6 +9,12 @@
     </head>
     
     <body>
+        <button id="menu_toggle" aria-label="Menu">☰</button>
+        <aside id="menu_drawer">
+            <h2>Case Files</h2>
+            <ul id="file_list"></ul>
+        </aside>
+
         <h1>
             Welcome Detective
         </h1>
@@ -35,6 +41,5 @@
         </form>
 
         <button class="btn-ghost" onclick="if(confirm('Are you sure? This will delete all the case files')) fetch('/delete_files', { method: 'DELETE' })">Delete All Files</button>
-        <button class="btn-ghost" onclick="fetch('/get_files').then(r => r.json()).then(files => alert(files.join('\n')))">Get Files</button>
     </body>
 </html>

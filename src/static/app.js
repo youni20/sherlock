@@ -108,3 +108,31 @@ document.getElementById("upload_file").addEventListener("submit", async (e) => {
     });
     console.log(await response.json());
 });
+
+const menuToggle = document.getElementById("menu_toggle");
+const menuDrawer = document.getElementById("menu_drawer");
+const fileList = document.getElementById("file_list");
+
+menuToggle.addEventListener("click", async () => {
+    const opening = !menuDrawer.classList.contains("open");
+    menuDrawer.classList.toggle("open");
+    menuToggle.textContent = opening ? "✕" : "☰";
+
+    if (!opening) return;
+
+    const response = await fetch("/get_files");
+    const files = await response.json();
+    fileList.innerHTML = "";
+    if (files.length === 0) {
+        const empty = document.createElement("li");
+        empty.className = "empty";
+        empty.textContent = "No case files uploaded";
+        fileList.appendChild(empty);
+        return;
+    }
+    files.forEach((name) => {
+        const fileItem = document.createElement("li");
+        fileItem.textContent = name;
+        fileList.appendChild(fileItem);
+    });
+});
