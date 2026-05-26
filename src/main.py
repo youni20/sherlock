@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from retrieval import retrieve_context_with_sources, vector_store
-from system import bootstrap_knowledge_base
+from system import embed_file
 from ingestion import DATA_COLLECTION
 from generation import ask_question
 
@@ -36,7 +36,7 @@ async def upload_file(file: UploadFile = File(...)):
         f.write(content)
         print("Added File")
 
-    bootstrap_knowledge_base()
+    embed_file(file.filename)
     print("Embedded File")
     
     return{

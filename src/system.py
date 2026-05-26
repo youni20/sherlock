@@ -9,19 +9,20 @@ import hashlib
 import os
 
 
-def bootstrap_knowledge_base() -> None:  # Embeds whatever hasnt been embedded yet
-    all_chunks: list[str] = []
-    all_metadatas: list[dict] = []
-    for root, dirs, files in os.walk(DATA_COLLECTION):  # Iterate through all files in a directory including in sub-directories
-        for file in files:
-            file_path = os.path.relpath(os.path.join(root, file), DATA_COLLECTION)
-            text = load_document(file_path)
-            chunks_list = split_text(document=text)
-            all_chunks.extend(chunks_list)
-            all_metadatas.extend([{"source": file}] * len(chunks_list))  # Tag each chunk with the filename it came from
+def embed_file(file_name: str) -> None:  # Embed a single file's chunks into the store
+    text = load_document(file_name)
+    chunks = split_text(document=text)
+    ids = [hashlib.sha256(c.encode()).hexdigest() for c in chunks]  # Same chunk content -> same hash -> Chroma deduplicates on insert
+    source = os.path.basename(file_name)  # Tag each chunk with the filename it came from
+    vector_store.add_texts(chunks, metadatas=[{"source": source}] * len(chunks), ids=ids)
 
-    ids: list[str] = [hashlib.sha256(c.encode()).hexdigest() for c in all_chunks]  # Same chunk content -> same hash -> Chroma deduplicates on update and insert
-    vector_store.add_texts(all_chunks, metadatas=all_metadatas, ids=ids)
+
+# Utility to re-embed every file in the collection (e.g. after wiping the vector store).
+# Not used by the upload flow, which embeds only the newly added file via embed_file().
+# def bootstrap_knowledge_base() -> None:
+#     for root, dirs, files in os.walk(DATA_COLLECTION):  # Iterate through all files including sub-directories
+#         for file in files:
+#             embed_file(os.path.relpath(os.path.join(root, file), DATA_COLLECTION))
 
 
 def run_cli() -> None:
