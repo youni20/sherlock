@@ -1,0 +1,12 @@
+services:
+  sherlock:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./case_files:/app/case_files
+      - ./chroma_vector_store:/app/chroma_vector_store
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
