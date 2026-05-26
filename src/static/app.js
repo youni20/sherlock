@@ -66,10 +66,12 @@ async function processQueue() {
         const queuedQuestion = questionQueue.dequeue();
         queuedQuestion.entry.remove();
         addMessage(`You: ${queuedQuestion.text}`, "user");
-        const loadingBubble = addMessage("Agent: ...", "agent");
+        const loadingBubble = addMessage("Agent:", "agent");
+        loadingBubble.classList.add("loading");
         const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: queuedQuestion.text }) });
         const data = await response.json();
         const noEvidence = "I don't have enough evidence to answer that.";
+        loadingBubble.classList.remove("loading");
         loadingBubble.textContent = data.answer === noEvidence
             ? `Agent: ${data.answer}`
             : `Agent: ${data.answer} (Source: ${data.sources})`;
