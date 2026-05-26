@@ -56,5 +56,35 @@
         });
         </script>
 
+<!-- Queue for handling Messages -->
+        <script>
+          class Queue{
+            
+            constructor(){
+              this.items = [];
+            }
+
+            enqueue(item){
+              this.items.push(item);
+            }
+
+            dequeue(){
+              if(this.isEmpty()){
+                return null;
+              } else{
+                return this.items.shift();
+              }
+            }
+
+            peek(){
+              return this.isEmpty() ? null : this.items[0];
+            }
+
+            isEmpty(){
+              return this.isEmpty() ? true : false;
+            }
+            
+          }
+        </script>
     </body>
 </html>
