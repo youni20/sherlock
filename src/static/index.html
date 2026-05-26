@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <title>Sherlock</title>
         <link rel="stylesheet" href="/static/style.css">
+        <script src="/static/app.js" defer></script>
     </head>
     
     <body>
@@ -12,30 +13,14 @@
             Welcome Detective
         </h1>
 
-<!-- Queue for handling Messages -->
-        <script>
-            class Queue{
-            constructor(){
-                this.items = [];
-            }
-            enqueue(item){
-                this.items.push(item);
-            }
-            dequeue(){
-              return this.isEmpty() ? null : this.items.shift() 
-            }
-            peek(){
-                return this.isEmpty() ? null : this.items[0];
-            }
-            isEmpty(){
-                return this.items.length === 0;
-            }
-        }
-        </script>
-
-        
-<!-- Logic for submiting questions -->        
-        <div id="chat_box"></div>
+<!-- Chat queued questions on the left and conversation on the right -->
+        <div id="chat_layout">
+            <aside id="queue_panel">
+                <h2>Queue</h2>
+                <ul id="queue_list"></ul>
+            </aside>
+            <div id="chat_box"></div>
+        </div>
 
         <form id="question_form">
             <label for="question">Question:</label>
@@ -43,67 +28,11 @@
             <button type="submit">Ask</button>
         </form>
 
-        <script>
-        const questionQueue = new Queue();
-        let isProcessing = false;
-
-        async function processQueue() {
-          isProcessing = true;
-          while (!questionQueue.isEmpty()) {
-            const q = questionQueue.dequeue();
-            const loading = document.createElement("p");
-            loading.textContent = "Agent: ...";
-            document.getElementById("chat_box").appendChild(loading);
-            const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: q }) });
-            const data = await response.json();
-            const noEvidence = "I don't have enough evidence to answer that.";
-            loading.textContent = data.answer === noEvidence
-              ? `Agent: ${data.answer}`
-              : `Agent: ${data.answer} (Source: ${data.sources})`;
-          }
-          isProcessing = false;
-        }
-
-        document.getElementById("question_form").addEventListener("submit", (e) => {
-          e.preventDefault();
-          const question = document.getElementById("question").value.trim();
-
-          if (question === "/clear") {
-            document.getElementById("chat_box").innerHTML = "";
-            document.getElementById("question_form").reset();
-            return;
-          }
-          
-          if (!question) return;
-          document.getElementById("chat_box").innerHTML += `<p>You: ${question}</p>`;
-          if (isProcessing) document.getElementById("chat_box").innerHTML += `<p>Queued: ${question}</p>`;
-          document.getElementById("question_form").reset();
-          questionQueue.enqueue(question);
-          if (!isProcessing) processQueue();
-        });
-        </script>
-
-        
-<!-- Logic for uploading files -->
+<!-- File upload + management -->
         <form id="upload_file">
             <input type="file" id="file_upload" name="file">
             <button type="submit">Upload Document</button>
         </form>
-
-        <script>
-        
-        document.getElementById("upload_file").addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const data = new FormData();
-          data.append("file", document.getElementById("file_upload").files[0]);
-
-          const response = await fetch("/ingest_file", {
-            method: "POST",
-            body: data,
-          })
-          console.log(await response.json());
-        });
-        </script>
 
         <button onclick="if(confirm('Are you sure? This will delete all the case files')) fetch('/delete_files', { method: 'DELETE' })">Delete All Files</button>
         <button onclick="fetch('/get_files').then(r => r.json()).then(files => alert(files.join('\n')))">Get Files</button>
