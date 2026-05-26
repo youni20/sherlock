@@ -1,28 +1,30 @@
 import pytest
+from langchain_chroma import Chroma
 
 from generation import ask_question
 from ingestion import load_document, split_text
-from retrieval import vector_store, retrive_context
+from retrieval import embedding_model, retrive_context
 
 
 #  Exact sentence when evidence is mising
 ABSTENTION: str = "I don't have enough evidence to answer that."
 
 CASE_FILES: list[str] = [
-    "txt_files/case_001_thornfield_manor.txt",
-    "txt_files/case_002_finch_disappearance.txt",
-    "pdf_files/case_003_blackwood_estate.pdf",
+    "case_001_thornfield_manor.txt",
+    "case_002_finch_disappearance.txt",
+    "case_003_blackwood_estate.pdf",
 ]
+
+#  Isolated in-memory store so the test session never touches the real persistent vector store
+test_store: Chroma = Chroma(collection_name="test-case-files", embedding_function=embedding_model)
+
 
 @pytest.fixture(scope="session", autouse=True)
 def knowledge_base():  # Ingest all three case files once before the test session
-    existing_ids = vector_store.get()["ids"]
-    if existing_ids:
-        vector_store.delete(existing_ids)
     for file in CASE_FILES:
         text = load_document(file)
         chunks = split_text(text)
-        vector_store.add_texts(chunks)
+        test_store.add_texts(chunks)
 
 
 #  Questions that should be answerable and based of case 001
@@ -72,7 +74,7 @@ ABSTENTION_CASES = [
 @pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
 def test_answerable_questions(question, keywords):
     """The answer must contain every expected keyword (case-insensitive)."""
-    context = retrive_context(vector_store, question)
+    context = retrive_context(test_store, question)
     answer = ask_question(question, context)
     lowered = answer.lower()
     for keyword in keywords:
@@ -85,7 +87,7 @@ def test_answerable_questions(question, keywords):
 @pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
 def test_answerable_questions_do_not_abstain(question, keywords):
     """Answerable questions must not trigger the abstention response."""
-    context = retrive_context(vector_store, question)
+    context = retrive_context(test_store, question)
     answer = ask_question(question, context)
     assert ABSTENTION not in answer, (
         f"Expected a real answer but got abstention for '{question}'.\n"
@@ -96,7 +98,7 @@ def test_answerable_questions_do_not_abstain(question, keywords):
 @pytest.mark.parametrize("question", ABSTENTION_CASES)
 def test_abstention_questions(question):
     """When evidence is absent the system must return the exact abstention sentence."""
-    context = retrive_context(vector_store, question)
+    context = retrive_context(test_store, question)
     answer = ask_question(question, context)
     assert answer.strip() == ABSTENTION, (
         f"Expected the exact abstention sentence for '{question}'.\n"
