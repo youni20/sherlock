@@ -11,6 +11,7 @@ from generation import ask_question
 
 import uvicorn
 import shutil
+import re
 
 
 VECTOR_STORE: Path = Path("./chroma_vector_store")
@@ -43,8 +44,17 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/get_answer")
 def get_answer(body: QuestionRequest) -> dict:
-    docs, sources = retrieve_context_with_sources(vector_store=vector_store, question=body.question)
-    answer: str = ask_question(body.question, docs)
+    docs, retrieved_sources = retrieve_context_with_sources(vector_store=vector_store, question=body.question)
+    raw: str = ask_question(body.question, docs)
+
+    match = re.search(r"^SOURCES:\s*(.*)$", raw, re.MULTILINE)
+    if match and match.group(1).strip().lower() != "none":
+        cited = [s.strip() for s in match.group(1).split(",") if s.strip()]
+        sources = [s for s in cited if s in retrieved_sources]
+    else:
+        sources = []
+    answer = re.sub(r"\n?^SOURCES:.*$", "", raw, flags=re.MULTILINE).strip()
+
     return {"answer": answer, "sources": sources}
 
 @app.delete("/delete_files")

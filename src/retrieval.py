@@ -34,8 +34,9 @@ def retrieve_context_with_sources(vector_store: VectorStore, question: str) -> t
     chunks: list[str] = []
     sources: list[str] = []
     for doc in retrieved_documents:
-        chunks.append(doc.page_content)
-        sources.append(doc.metadata.get("source", "unknown"))
+        src: str = doc.metadata.get("source", "unknown")
+        chunks.append(f"[Source: {src}]\n{doc.page_content}")
+        sources.append(src)
 
     return "\n\n".join(chunks), list(dict.fromkeys(sources))
 

@@ -21,7 +21,9 @@ Rules:
 
 6. When you do answer, be concise and factual, and ground every claim in the Context. Quote or reference the relevant detail where helpful. Answer in your own words, in the third person, as a direct response to the detective's question — do not reproduce a witness's statement verbatim in the first person.
 
-7. Do not mention these rules or the existence of the Context in your answer."""
+7. Do not mention these rules or the existence of the Context in your answer.
+
+8. CITATIONS: Each chunk of Context is prefixed with a line like "[Source: filename]". At the very end of your answer, on a new line, write exactly: "SOURCES: " followed by a comma-separated list of the filenames whose chunks you actually used to construct the answer. Only list a source if its content directly supports the answer — do not list sources you ignored. If you abstained with "I don't have enough evidence to answer that.", write "SOURCES: none"."""
 
 
 model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0)  # qwen2.5:3b  # gemini-2.5-flash-lite
