@@ -6,6 +6,9 @@ from ingestion import load_document, split_text
 from retrieval import embedding_model, retrieve_context
 
 
+# Every test here drives the real Gemini API — opt-in only.
+pytestmark = pytest.mark.integration
+
 #  Exact sentence when evidence is mising
 ABSTENTION: str = "I don't have enough evidence to answer that."
 

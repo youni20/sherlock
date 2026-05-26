@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+
+# Make the app modules in src/ importable when running this script directly.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
 from dotenv import load_dotenv
 load_dotenv()
 

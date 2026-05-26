@@ -17,6 +17,7 @@ def test_get_files_returns_list():
     assert isinstance(response.json(), list)
 
 
+@pytest.mark.integration
 def test_ingest_txt_file():
     content = b"This is a test case file with witness statements."
     response = client.post(
@@ -27,6 +28,7 @@ def test_ingest_txt_file():
     assert response.json()["filename"] == "test_case.txt"
 
 
+@pytest.mark.integration
 def test_get_answer_returns_answer_and_sources():
     response = client.post("/get_answer", json={"question": "What happened?"})
     assert response.status_code == 200
