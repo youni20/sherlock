@@ -117,6 +117,7 @@ body > button { margin-top: 16px; }
 .msg.user { align-self: flex-start; background-color: var(--shadow); }
 .msg.agent { align-self: flex-end; background-color: var(--black); border: 1px solid var(--border-faint); }
 
+/* Loading while waiting for msg*/
 .msg.loading::after {
     content: "...";
     display: inline-block;
