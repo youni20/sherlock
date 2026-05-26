@@ -13,6 +13,7 @@ import shutil
 
 VECTOR_STORE: Path = Path("./chroma_vector_store")
 
+
 class QuestionRequest(BaseModel):
     question: str
 
@@ -45,12 +46,14 @@ def get_answer(body: QuestionRequest) -> dict:
     return {"answer": answer, "sources": sources}
 
 @app.delete("/delete_files")
-def remove_files() -> dict:
+def remove_files() -> None:
     for file in DATA_COLLECTION.rglob("*"):
         if file.is_file():
             file.unlink()
     vector_store.reset_collection()
-    return {"message": "All files and embeddings deleted"}
+    shutil.rmtree(VECTOR_STORE)
+    VECTOR_STORE.mkdir()
+    print("All files and embeddings deleted")
     
 
 if __name__ == "__main__":

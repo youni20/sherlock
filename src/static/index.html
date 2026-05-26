@@ -88,5 +88,7 @@
           console.log(await response.json());
         });
         </script>
+
+        <button onclick="if(confirm('Are you sure? This will delete all the case files')) fetch('/delete_files', { method: 'DELETE' })">Delete All Files</button>
     </body>
 </html>
