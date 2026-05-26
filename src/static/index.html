@@ -37,7 +37,7 @@
 
         <form id="question_form">
             <label for="question">Question:</label>
-            <input type="text" id="question" name="question" placeholder="type '/exit' to close the program">
+            <input type="text" id="question" name="question" placeholder="Ask a question or type '/clear' to reset chat">
             <button type="submit">Ask</button>
         </form>
 
@@ -63,8 +63,10 @@
           e.preventDefault();
           const question = document.getElementById("question").value.trim();
 
-          if(question=="/exit"){
-            window.close()
+          if (question === "/clear") {
+            document.getElementById("chat_box").innerHTML = "";
+            document.getElementById("question_form").reset();
+            return;
           }
           
           if (!question) return;

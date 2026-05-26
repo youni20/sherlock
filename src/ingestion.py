@@ -14,9 +14,12 @@ def split_text(document: str) -> list[str]:  # Chunking the text for the embeddi
 def load_document(file_name: str) -> str:
     file_path: Path = DATA_COLLECTION / file_name
 
+    if not file_name.endswith(".pdf") and not file_name.endswith(".txt"):
+        raise ValueError(f"Unsupported file type: {file_name}. Expected .pdf or .txt")
+
     if not file_path.exists():
         raise FileNotFoundError("Error invalid file path")
-        
+
     if file_name.endswith(".pdf"):  # If file is a pdf file
         try:
             reader: PdfReader = PdfReader(file_path)
@@ -34,5 +37,3 @@ def load_document(file_name: str) -> str:
                 return file_content
         except Exception as e:
             raise RuntimeError(f"Failed to read text file: {file_name}") from e
-
-    raise ValueError(f"Unsupported file type: {file_name}. Expected .pdf or .txt")
