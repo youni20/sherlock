@@ -10,10 +10,9 @@ from generation import ask_question
 
 import uvicorn
 import shutil
-import os
+
 
 VECTOR_STORE: Path = Path("./chroma_vector_store")
-
 
 class QuestionRequest(BaseModel):
     question: str
@@ -59,9 +58,9 @@ def remove_files() -> None:
 @app.get("/get_files")
 def get_files() -> list[str]:
     case_files: list[str] = [] 
-    for file in os.listdir(DATA_COLLECTION):
-        case_files.append(file)
-        print(file)
+    for file in DATA_COLLECTION.rglob("*"):
+        if file.is_file():
+            case_files.append(file.name)
     return case_files
         
 
