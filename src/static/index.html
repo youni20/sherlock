@@ -10,6 +10,27 @@
             Welcome, Please Enter Your Question
         </h1>
 
+<!-- Queue for handling Messages -->
+        <script>
+            class Queue{
+            constructor(){
+                this.items = [];
+            }
+            enqueue(item){
+                this.items.push(item);
+            }
+            dequeue(){
+              return this.isEmpty() ? null : this.items.shift() 
+            }
+            peek(){
+                return this.isEmpty() ? null : this.items[0];
+            }
+            isEmpty(){
+                return this.items.length === 0;
+            }
+        }
+        </script>
+
         
 <!-- Logic for submiting questions -->        
         <div id="chat_box"></div>
@@ -21,6 +42,8 @@
         </form>
 
         <script>
+        questionQueue = new Queue();
+        
         document.getElementById("question_form").addEventListener("submit", async (e) => {
           e.preventDefault();
           const question = document.getElementById("question").value.trim();
@@ -29,9 +52,8 @@
           document.getElementById("chat_box").innerHTML += `<p>You: ${question}</p>`;
           document.getElementById("question_form").reset();
 
-          const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question }) });
-          const data = await response.json();
-          document.getElementById("chat_box").innerHTML += `<p>Agent: ${data.answer} (Source: ${data.sources})</p>`;
+          questionQueue.enqueue(question);
+          // TODO: queue processing logic here
         });
         </script>
 
@@ -43,6 +65,7 @@
         </form>
 
         <script>
+        
         document.getElementById("upload_file").addEventListener("submit", async (e) => {
           e.preventDefault();
           const data = new FormData();
@@ -54,37 +77,6 @@
           })
           console.log(await response.json());
         });
-        </script>
-
-<!-- Queue for handling Messages -->
-        <script>
-          class Queue{
-            
-            constructor(){
-              this.items = [];
-            }
-
-            enqueue(item){
-              this.items.push(item);
-            }
-
-            dequeue(){
-              if(this.isEmpty()){
-                return null;
-              } else{
-                return this.items.shift();
-              }
-            }
-
-            peek(){
-              return this.isEmpty() ? null : this.items[0];
-            }
-
-            isEmpty(){
-              return this.isEmpty() ? true : false;
-            }
-            
-          }
         </script>
     </body>
 </html>
