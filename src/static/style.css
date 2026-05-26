@@ -1,5 +1,8 @@
 body {
     background-color: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h1 {
@@ -11,6 +14,14 @@ h1 {
     font-family: sans-serif;
 }
 
-.chat_box {
-    color: 5e5e5e
+#chat_box {
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px 0px;
+    width: 100%;
+    max-width: 800px;
+    min-height: 70vh;
+    padding: 24px;
+    box-sizing: border-box;
 }
