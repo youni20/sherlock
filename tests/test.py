@@ -3,7 +3,7 @@ from langchain_chroma import Chroma
 
 from generation import ask_question
 from ingestion import load_document, split_text
-from retrieval import embedding_model, retrive_context
+from retrieval import embedding_model, retrieve_context
 
 
 #  Exact sentence when evidence is mising
@@ -74,7 +74,7 @@ ABSTENTION_CASES = [
 @pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
 def test_answerable_questions(question, keywords):
     """The answer must contain every expected keyword (case-insensitive)."""
-    context = retrive_context(test_store, question)
+    context = retrieve_context(test_store, question)
     answer = ask_question(question, context)
     lowered = answer.lower()
     for keyword in keywords:
@@ -87,7 +87,7 @@ def test_answerable_questions(question, keywords):
 @pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
 def test_answerable_questions_do_not_abstain(question, keywords):
     """Answerable questions must not trigger the abstention response."""
-    context = retrive_context(test_store, question)
+    context = retrieve_context(test_store, question)
     answer = ask_question(question, context)
     assert ABSTENTION not in answer, (
         f"Expected a real answer but got abstention for '{question}'.\n"
@@ -98,7 +98,7 @@ def test_answerable_questions_do_not_abstain(question, keywords):
 @pytest.mark.parametrize("question", ABSTENTION_CASES)
 def test_abstention_questions(question):
     """When evidence is absent the system must return the exact abstention sentence."""
-    context = retrive_context(test_store, question)
+    context = retrieve_context(test_store, question)
     answer = ask_question(question, context)
     assert answer.strip() == ABSTENTION, (
         f"Expected the exact abstention sentence for '{question}'.\n"

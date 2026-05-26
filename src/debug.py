@@ -1,10 +1,10 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from retrieval import retrive_context, vector_store
+from retrieval import retrieve_context, vector_store
 
 
-context = retrive_context(vector_store, "What did the night watchman see?")
+context = retrieve_context(vector_store, "What did the night watchman see?")
 print(context)
 
 all_chunks = vector_store.get()

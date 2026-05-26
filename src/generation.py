@@ -3,7 +3,7 @@ from langchain_core.language_models import BaseChatModel
 from langgraph.pregel.main import Runnable
 
 # from langchain_ollama import ChatOllama
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI, HarmBlockThreshold, HarmCategory
 
 
 SYSTEM_PROMPT = """You are Sherlock, an assistant that answers a detective's questions strictly from the case files provided to you.
@@ -26,7 +26,20 @@ Rules:
 8. CITATIONS: Each chunk of Context is prefixed with a line like "[Source: filename]". At the very end of your answer, on a new line, write exactly: "SOURCES: " followed by a comma-separated list of the filenames whose chunks you actually used to construct the answer. Only list a source if its content directly supports the answer — do not list sources you ignored. If you abstained with "I don't have enough evidence to answer that.", write "SOURCES: none"."""
 
 
-model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0)  # qwen2.5:3b  # gemini-2.5-flash-lite
+# Case files describe crimes (murder, assault, theft), which Gemini's default safety
+# filters refuse to discuss. Set every category to BLOCK_NONE so answers come from the
+# evidence — the strict prompt above is what keeps the model grounded, not the filter.
+_SAFETY_SETTINGS = {
+    category: HarmBlockThreshold.BLOCK_NONE
+    for category in (
+        HarmCategory.HARM_CATEGORY_HARASSMENT,
+        HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+        HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+    )
+}
+
+model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0, safety_settings=_SAFETY_SETTINGS)  # qwen2.5:3b  # gemini-2.5-flash-lite
 
 agent: Runnable = create_agent(
     model=model,

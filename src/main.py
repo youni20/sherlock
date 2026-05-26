@@ -1,8 +1,7 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from pathlib import Path
 
 from retrieval import retrieve_context_with_sources, vector_store
 from system import bootstrap_knowledge_base
@@ -10,11 +9,8 @@ from ingestion import DATA_COLLECTION
 from generation import ask_question
 
 import uvicorn
-import shutil
 import re
 
-
-VECTOR_STORE: Path = Path("./chroma_vector_store")
 
 class QuestionRequest(BaseModel):
     question: str
@@ -22,12 +18,19 @@ class QuestionRequest(BaseModel):
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
+@app.get("/health")
+def health() -> dict:
+    return {"status": "ok"}
+
 @app.get("/", response_class=FileResponse)
 def home() -> FileResponse:
     return FileResponse("src/static/index.html")
 
 @app.post("/ingest_file")
 async def upload_file(file: UploadFile = File(...)):
+    if not (file.filename or "").lower().endswith((".pdf", ".txt")):
+        raise HTTPException(status_code=400, detail="Only .pdf and .txt files are supported.")
+
     with open(f"{DATA_COLLECTION}/{file.filename}", "wb") as f:
         content = await file.read()
         f.write(content)
@@ -63,8 +66,6 @@ def remove_files() -> None:
         if file.is_file():
             file.unlink()
     vector_store.reset_collection()
-    shutil.rmtree(VECTOR_STORE)
-    VECTOR_STORE.mkdir()
     print("All files and embeddings deleted")
 
 @app.get("/get_files")

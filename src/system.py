@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from generation import ask_question
-from retrieval import retrive_context, vector_store, retrieve_context_with_sources
+from retrieval import retrieve_context, vector_store, retrieve_context_with_sources
 from ingestion import split_text, load_document, DATA_COLLECTION
 
 import hashlib
@@ -10,18 +10,18 @@ import os
 
 
 def bootstrap_knowledge_base() -> None:  # Embeds whatever hasnt been embedded yet
-    all_chunkz: list[str] = []
+    all_chunks: list[str] = []
     all_metadatas: list[dict] = []
-    for root, dir, files in os.walk(DATA_COLLECTION):  # Iterate through all files in a directory including in sub-directories
+    for root, dirs, files in os.walk(DATA_COLLECTION):  # Iterate through all files in a directory including in sub-directories
         for file in files:
             file_path = os.path.relpath(os.path.join(root, file), DATA_COLLECTION)
             text = load_document(file_path)
             chunks_list = split_text(document=text)
-            all_chunkz.extend(chunks_list)
+            all_chunks.extend(chunks_list)
             all_metadatas.extend([{"source": file}] * len(chunks_list))  # Tag each chunk with the filename it came from
 
-    ids: list[str] = [hashlib.sha256(c.encode()).hexdigest() for c in all_chunkz]  # Same chunk content -> same hash -> Chroma deduplicates on update and insert
-    vector_store.add_texts(all_chunkz, metadatas=all_metadatas, ids=ids)
+    ids: list[str] = [hashlib.sha256(c.encode()).hexdigest() for c in all_chunks]  # Same chunk content -> same hash -> Chroma deduplicates on update and insert
+    vector_store.add_texts(all_chunks, metadatas=all_metadatas, ids=ids)
 
 
 def run_cli() -> None:
@@ -32,7 +32,7 @@ def run_cli() -> None:
         if (question == "/exit"):
             running = False
             break
-        #  docs: str = retrive_context(vector_store=vector_store, question=question)
+        #  docs: str = retrieve_context(vector_store=vector_store, question=question)
         docs, sources = retrieve_context_with_sources(vector_store=vector_store, question=question)
         answer: str = ask_question(question, docs)
         print(f"response: {answer}")

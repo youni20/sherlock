@@ -18,7 +18,7 @@ vector_store: Chroma = Chroma(
     persist_directory="./chroma_vector_store"
 )
 
-def retrive_context(vector_store: VectorStore, question: str) -> str:
+def retrieve_context(vector_store: VectorStore, question: str) -> str:
     retriever: VectorStoreRetriever = vector_store.as_retriever()
     retrieved_documents: list[Document] = retriever.invoke(question)
     chunks: list[str] = []
