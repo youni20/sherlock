@@ -62,6 +62,11 @@
         document.getElementById("question_form").addEventListener("submit", (e) => {
           e.preventDefault();
           const question = document.getElementById("question").value.trim();
+
+          if(question=="/exit"){
+            window.close()
+          }
+          
           if (!question) return;
           document.getElementById("chat_box").innerHTML += `<p>You: ${question}</p>`;
           if (isProcessing) document.getElementById("chat_box").innerHTML += `<p>Queued: ${question}</p>`;
