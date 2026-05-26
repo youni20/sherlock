@@ -25,3 +25,18 @@ h1 {
     padding: 24px;
     box-sizing: border-box;
 }
+
+button {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #282828;
+}
