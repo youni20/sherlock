@@ -3,7 +3,7 @@ from langchain_chroma import Chroma
 
 from generation import ask_question
 from ingestion import load_document, split_text
-from retrieval import embedding_model, retrieve_context
+from retrieval import get_embedding_model, retrieve_context
 
 
 # Every test here drives the real Gemini API — opt-in only.
@@ -18,16 +18,16 @@ CASE_FILES: list[str] = [
     "case_003_blackwood_estate.pdf",
 ]
 
-#  Isolated in-memory store so the test session never touches the real persistent vector store
-test_store: Chroma = Chroma(collection_name="test-case-files", embedding_function=embedding_model)
-
-
-@pytest.fixture(scope="session", autouse=True)
-def knowledge_base():  # Ingest all three case files once before the test session
-    for file in CASE_FILES:
+#  Isolated in-memory store so the test session never touches the real persistent vector store.
+#  Built inside a fixture (not at import) so collecting this file never constructs a real client.
+@pytest.fixture(scope="session")
+def test_store() -> Chroma:
+    store = Chroma(collection_name="test-case-files", embedding_function=get_embedding_model())
+    for file in CASE_FILES:  # Ingest all three case files once before the test session
         text = load_document(file)
         chunks = split_text(text)
-        test_store.add_texts(chunks)
+        store.add_texts(chunks)
+    return store
 
 
 #  Questions that should be answerable and based of case 001
@@ -75,7 +75,7 @@ ABSTENTION_CASES = [
 
 
 @pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
-def test_answerable_questions(question, keywords):
+def test_answerable_questions(test_store, question, keywords):
     """The answer must contain every expected keyword (case-insensitive)."""
     context = retrieve_context(test_store, question)
     answer = ask_question(question, context)
@@ -88,7 +88,7 @@ def test_answerable_questions(question, keywords):
 
 
 @pytest.mark.parametrize("question, keywords", ANSWERABLE_CASES)
-def test_answerable_questions_do_not_abstain(question, keywords):
+def test_answerable_questions_do_not_abstain(test_store, question, keywords):
     """Answerable questions must not trigger the abstention response."""
     context = retrieve_context(test_store, question)
     answer = ask_question(question, context)
@@ -99,7 +99,7 @@ def test_answerable_questions_do_not_abstain(question, keywords):
 
 
 @pytest.mark.parametrize("question", ABSTENTION_CASES)
-def test_abstention_questions(question):
+def test_abstention_questions(test_store, question):
     """When evidence is absent the system must return the exact abstention sentence."""
     context = retrieve_context(test_store, question)
     answer = ask_question(question, context)
