@@ -10,6 +10,7 @@ from generation import ask_question
 
 import uvicorn
 import shutil
+import os
 
 VECTOR_STORE: Path = Path("./chroma_vector_store")
 
@@ -54,7 +55,15 @@ def remove_files() -> None:
     shutil.rmtree(VECTOR_STORE)
     VECTOR_STORE.mkdir()
     print("All files and embeddings deleted")
-    
+
+@app.get("/get_files")
+def get_files() -> list[str]:
+    case_files: list[str] = [] 
+    for file in os.listdir(DATA_COLLECTION):
+        case_files.append(file)
+        print(file)
+    return case_files
+        
 
 if __name__ == "__main__":
     uvicorn.run(app='main:app', port=8080, reload=True)

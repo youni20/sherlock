@@ -90,5 +90,6 @@
         </script>
 
         <button onclick="if(confirm('Are you sure? This will delete all the case files')) fetch('/delete_files', { method: 'DELETE' })">Delete All Files</button>
+        <button onclick="fetch('/get_files').then(r => r.json()).then(files => alert(files.join('\n')))">Get Files</button>
     </body>
 </html>
