@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from pathlib import Path
 
@@ -18,6 +19,7 @@ class QuestionRequest(BaseModel):
     question: str
 
 app: FastAPI = FastAPI()
+app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
 @app.get("/", response_class=FileResponse)
 def home() -> FileResponse:
