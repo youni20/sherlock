@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from pathlib import Path
 
 from retrieval import retrieve_context_with_sources, vector_store
 from system import bootstrap_knowledge_base
@@ -8,11 +9,12 @@ from ingestion import DATA_COLLECTION
 from generation import ask_question
 
 import uvicorn
+import shutil
+
+VECTOR_STORE: Path = Path("./chroma_vector_store")
 
 class QuestionRequest(BaseModel):
     question: str
-
-# from system import run_cli
 
 app: FastAPI = FastAPI()
 
@@ -42,9 +44,14 @@ def get_answer(body: QuestionRequest) -> dict:
     answer: str = ask_question(body.question, docs)
     return {"answer": answer, "sources": sources}
 
-
+@app.delete("/delete_files")
+def remove_files() -> dict:
+    for file in DATA_COLLECTION.rglob("*"):
+        if file.is_file():
+            file.unlink()
+    vector_store.reset_collection()
+    return {"message": "All files and embeddings deleted"}
+    
 
 if __name__ == "__main__":
     uvicorn.run(app='main:app', port=8080, reload=True)
-    #bootstrap_knowledge_base()
-    #run_cli()
