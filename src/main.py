@@ -34,12 +34,10 @@ async def upload_file(file: UploadFile = File(...)):
     with open(f"{DATA_COLLECTION}/{file.filename}", "wb") as f:
         content = await file.read()
         f.write(content)
-        print("Added File")
 
     embed_file(file.filename)
-    print("Embedded File")
-    
-    return{
+
+    return {
         "filename": file.filename,
         "content_type": file.content_type,
         "saved_at": DATA_COLLECTION
@@ -66,16 +64,15 @@ def remove_files() -> None:
         if file.is_file():
             file.unlink()
     vector_store.reset_collection()
-    print("All files and embeddings deleted")
 
 @app.get("/get_files")
 def get_files() -> list[str]:
-    case_files: list[str] = [] 
+    case_files: list[str] = []
     for file in DATA_COLLECTION.rglob("*"):
         if file.is_file():
             case_files.append(file.name)
     return case_files
-        
+
 
 if __name__ == "__main__":
     uvicorn.run(app='main:app', port=8080, reload=True)

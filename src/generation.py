@@ -2,7 +2,6 @@ from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
 from langgraph.pregel.main import Runnable
 
-# from langchain_ollama import ChatOllama
 from langchain_google_genai import ChatGoogleGenerativeAI, HarmBlockThreshold, HarmCategory
 
 
@@ -39,7 +38,7 @@ _SAFETY_SETTINGS = {
     )
 }
 
-model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0, safety_settings=_SAFETY_SETTINGS)  # qwen2.5:3b  # gemini-2.5-flash-lite
+model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0, safety_settings=_SAFETY_SETTINGS)
 
 agent: Runnable = create_agent(
     model=model,

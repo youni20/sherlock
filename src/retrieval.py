@@ -1,6 +1,5 @@
 from langchain_core.documents.base import Document
 from langchain_core.vectorstores.base import VectorStoreRetriever
-# from langchain_ollama import OllamaEmbeddings
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_core.vectorstores import VectorStore
 from langchain_chroma import Chroma
@@ -9,7 +8,6 @@ from langchain_chroma import Chroma
 #  Initialise the embedding model
 embedding_model: GoogleGenerativeAIEmbeddings = GoogleGenerativeAIEmbeddings(
     model="gemini-embedding-001"
-    # output_dimensionality=768,
 )
 
 vector_store: Chroma = Chroma(
@@ -39,6 +37,3 @@ def retrieve_context_with_sources(vector_store: VectorStore, question: str) -> t
         sources.append(src)
 
     return "\n\n".join(chunks), list(dict.fromkeys(sources))
-
-
-
