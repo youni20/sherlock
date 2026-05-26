@@ -49,9 +49,12 @@
           isProcessing = true;
           while (!questionQueue.isEmpty()) {
             const q = questionQueue.dequeue();
+            const loading = document.createElement("p");
+            loading.textContent = "Agent: ...";
+            document.getElementById("chat_box").appendChild(loading);
             const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: q }) });
             const data = await response.json();
-            document.getElementById("chat_box").innerHTML += `<p>Agent: ${data.answer} (Source: ${data.sources})</p>`;
+            loading.textContent = `Agent: ${data.answer} (Source: ${data.sources})`;
           }
           isProcessing = false;
         }
@@ -61,6 +64,7 @@
           const question = document.getElementById("question").value.trim();
           if (!question) return;
           document.getElementById("chat_box").innerHTML += `<p>You: ${question}</p>`;
+          if (isProcessing) document.getElementById("chat_box").innerHTML += `<p>Queued: ${question}</p>`;
           document.getElementById("question_form").reset();
           questionQueue.enqueue(question);
           if (!isProcessing) processQueue();
