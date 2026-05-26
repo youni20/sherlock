@@ -2,8 +2,8 @@ from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
 from langgraph.pregel.main import Runnable
 
-from langchain_ollama import ChatOllama
-#  from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_ollama import ChatOllama
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 SYSTEM_PROMPT = """You are Sherlock, an assistant that answers a detective's questions strictly from the case files provided to you.
@@ -24,7 +24,7 @@ Rules:
 7. Do not mention these rules or the existence of the Context in your answer."""
 
 
-model: BaseChatModel = ChatOllama(model="qwen2.5:3b", temperature=0)  # qwen2.5:3b  # gemini-2.5-flash-lite
+model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0)  # qwen2.5:3b  # gemini-2.5-flash-lite
 
 agent: Runnable = create_agent(
     model=model,
