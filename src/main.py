@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from retrieval import retrieve_context_with_sources, vector_store
+from retrieval import retrieve_context_with_sources, get_vector_store
 from system import embed_file
 from ingestion import DATA_COLLECTION
 from generation import ask_question
@@ -45,7 +45,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/get_answer")
 def get_answer(body: QuestionRequest) -> dict:
-    docs, retrieved_sources = retrieve_context_with_sources(vector_store=vector_store, question=body.question)
+    docs, retrieved_sources = retrieve_context_with_sources(vector_store=get_vector_store(), question=body.question)
     raw: str = ask_question(body.question, docs)
 
     match = re.search(r"^SOURCES:\s*(.*)$", raw, re.MULTILINE)
@@ -63,7 +63,7 @@ def remove_files() -> None:
     for file in DATA_COLLECTION.rglob("*"):
         if file.is_file():
             file.unlink()
-    vector_store.reset_collection()
+    get_vector_store().reset_collection()
 
 @app.get("/get_files")
 def get_files() -> list[str]:

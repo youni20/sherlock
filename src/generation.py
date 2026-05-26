@@ -1,6 +1,7 @@
 from langchain.agents import create_agent
 from langchain_core.language_models import BaseChatModel
 from langgraph.pregel.main import Runnable
+from functools import lru_cache
 
 from langchain_google_genai import ChatGoogleGenerativeAI, HarmBlockThreshold, HarmCategory
 
@@ -38,15 +39,17 @@ _SAFETY_SETTINGS = {
     )
 }
 
-model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0, safety_settings=_SAFETY_SETTINGS)
-
-agent: Runnable = create_agent(
-    model=model,
-    system_prompt=SYSTEM_PROMPT
-)
+# Built lazily on first use so the module imports without an API key
+@lru_cache
+def get_agent() -> Runnable:
+    model: ChatGoogleGenerativeAI = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite", temperature=0, safety_settings=_SAFETY_SETTINGS)
+    return create_agent(
+        model=model,
+        system_prompt=SYSTEM_PROMPT
+    )
 
 def ask_question(msg: str, context: str) -> str:
     prompt: str = f"Answer only using the following context:\n\n{context}\n\nQuestion: {msg}"
-    result: dict = agent.invoke({"messages": [{"role": "user", "content": prompt}]})
+    result: dict = get_agent().invoke({"messages": [{"role": "user", "content": prompt}]})
     response: str = result["messages"][-1].content
     return response

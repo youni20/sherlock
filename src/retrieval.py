@@ -3,18 +3,23 @@ from langchain_core.vectorstores.base import VectorStoreRetriever
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_core.vectorstores import VectorStore
 from langchain_chroma import Chroma
+from functools import lru_cache
 
 
-#  Initialise the embedding model
-embedding_model: GoogleGenerativeAIEmbeddings = GoogleGenerativeAIEmbeddings(
-    model="gemini-embedding-001"
-)
+#  Built lazily on first use so the module imports without an API key
+@lru_cache
+def get_embedding_model() -> GoogleGenerativeAIEmbeddings:
+    return GoogleGenerativeAIEmbeddings(
+        model="gemini-embedding-001"
+    )
 
-vector_store: Chroma = Chroma(
-    collection_name="case-files",
-    embedding_function=embedding_model,
-    persist_directory="./chroma_vector_store"
-)
+@lru_cache
+def get_vector_store() -> Chroma:
+    return Chroma(
+        collection_name="case-files",
+        embedding_function=get_embedding_model(),
+        persist_directory="./chroma_vector_store"
+    )
 
 def retrieve_context(vector_store: VectorStore, question: str) -> str:
     retriever: VectorStoreRetriever = vector_store.as_retriever()
