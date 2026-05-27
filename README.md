@@ -136,7 +136,7 @@ The diagram below traces a request end to end — the browser hits the FastAPI a
 which runs the RAG pipeline (load → chunk → embed → store on ingest; retrieve →
 ground → generate on a question) and returns a sourced answer
 
-![Sherlock architecture and data-flow diagram](docs/diagrams/architecture_diagrams/white_architecture_diagram.png)
+![Sherlock architecture and data-flow diagram](docs/architecture_diagram.png)
 
 ---
 
