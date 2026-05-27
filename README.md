@@ -18,7 +18,7 @@ Upload `.txt` or `.pdf` case files, then ask questions like *"What was Mrs. Huds
 
 ---
 
-## Getting started
+## How to run it
 
 ### 1. Get a free API key
 
@@ -87,7 +87,7 @@ uv run pytest                 # offline unit tests (no API key needed)
 uv run pytest -m integration  # live tests against the Gemini API (needs a key)
 ```
 
-Coverage: chunking & loading, source-parsing, endpoint smoke tests, and a grounding suite that checks answerable questions return correct facts and unanswerable ones return the abstention sentence.
+What the tests cover: chunking & loading, source-parsing, endpoint smoke tests, and a grounding suite that checks answerable questions return correct facts and unanswerable ones return the abstention sentence.
 
 ---
 
