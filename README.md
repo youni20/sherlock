@@ -23,6 +23,14 @@ something up:
 - **Frontend:** vanilla HTML, CSS, and JavaScript
 - **Infrastructure:** Docker + Docker Compose, with uv for dependency management
 
+## Architecture & Data Flow
+
+The diagram below traces a request end to end — the browser hits the FastAPI app,
+which runs the RAG pipeline (load → chunk → embed → store on ingest; retrieve →
+ground → generate on a question) and returns a sourced answer
+
+![Sherlock architecture and data-flow diagram](docs/diagrams/architecture_diagrams/Architecture_Diagram.png)
+
 ## Getting started
 
 ### 1. Get a free API key

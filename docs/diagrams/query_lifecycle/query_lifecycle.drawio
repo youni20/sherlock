@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="WS8n3Vr5n16WkkqAZNhP">
+    <mxGraphModel dx="693" dy="861" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-8" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="rQdXBASecmZ2-1xjXDMd-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;Client POSTs question&lt;/div&gt;&lt;div&gt;app.js processQueue, JSON body&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="220" x="120" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="HTTP POST" vertex="1">
+          <mxGeometry height="30" width="70" x="245" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-5" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;main.get_answer receives request&lt;/div&gt;&lt;div&gt;Pydantic validates QuestionRequest&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="220" x="120" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="valid question" vertex="1">
+          <mxGeometry height="30" width="80" x="240" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-9" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="rQdXBASecmZ2-1xjXDMd-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;retrieve_context_with_sources&lt;/div&gt;&lt;div&gt;Similarity search, chunks tagged [Source: ...]&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="250" x="105" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-12" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;ask_question(question, context)&lt;/div&gt;&lt;div&gt;Single grounded Gemini call, no tools&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="240" x="110" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-11" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Context + Source" vertex="1">
+          <mxGeometry height="30" width="110" x="230" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-13" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="raw answer" vertex="1">
+          <mxGeometry height="30" width="70" x="240" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-15" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="360" y="445" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-22" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="rQdXBASecmZ2-1xjXDMd-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-14" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Context Supports the asnwer?" vertex="1">
+          <mxGeometry height="90" width="160" x="150" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;div&gt;No&lt;/div&gt;" vertex="1">
+          <mxGeometry height="30" width="60" x="300" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-18" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="rQdXBASecmZ2-1xjXDMd-20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="540" />
+            </Array>
+            <mxPoint x="300" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Abstain,&lt;br&gt;SOURCES: none" vertex="1">
+          <mxGeometry height="45" width="100" x="360" y="422.5" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-19" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="to parsing" vertex="1">
+          <mxGeometry height="30" width="60" x="360" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-24" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;Parse SOURCES line&lt;/div&gt;&lt;div&gt;Regex splits filenames from answer body&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="160" x="150" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Yes" vertex="1">
+          <mxGeometry height="30" width="60" x="180" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="cited filenames" vertex="1">
+          <mxGeometry height="30" width="90" x="230" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-27" edge="1" parent="1" source="rQdXBASecmZ2-1xjXDMd-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="230" y="710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-26" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="&lt;div&gt;Cross-check cited vs retrieved&lt;/div&gt;&lt;div&gt;Drops any source not actually retrieved&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="210" x="125" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-28" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="verified sources" vertex="1">
+          <mxGeometry height="30" width="90" x="230" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="rQdXBASecmZ2-1xjXDMd-29" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Return {answer, sources} to client" vertex="1">
+          <mxGeometry height="40" width="185" x="145" y="710" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
