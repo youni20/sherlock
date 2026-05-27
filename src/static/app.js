@@ -172,3 +172,14 @@ menuToggle.addEventListener("click", () => {
     menuToggle.textContent = opening ? "✕" : "☰";
     if (opening) loadFiles();
 });
+
+document.getElementById("delete_files").addEventListener("click", async () => {
+    if (!confirm("Are you sure? This will delete all the case files")) return;
+    try {
+        const response = await fetch("/delete_files", { method: "DELETE" });
+        if (!response.ok) throw new Error(`Server responded with ${response.status}`);
+        loadFiles();
+    } catch (err) {
+        alert("Delete failed. Please try again.");
+    }
+});
