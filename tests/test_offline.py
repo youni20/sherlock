@@ -1,5 +1,5 @@
 # Offline tests for the /get_answer logic — no API key, no network.
-# Lazy client init (get_vector_store / get_agent) lets us import the app and
+# Lazy client init (get_vector_store / get_model) lets us import the app and
 # patch out the real Gemini/Chroma calls, so we can test the source-parsing
 # logic in main.py deterministically.
 
