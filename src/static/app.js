@@ -70,13 +70,19 @@ async function processQueue() {
         addMessage(`You: ${queuedQuestion.text}`, "user");
         const loadingBubble = addMessage("Agent:", "agent");
         loadingBubble.classList.add("loading");
-        const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: queuedQuestion.text }) });
-        const data = await response.json();
-        const noEvidence = "I don't have enough evidence to answer that.";
-        loadingBubble.classList.remove("loading");
-        loadingBubble.textContent = data.answer === noEvidence
-            ? `Agent: ${data.answer}`
-            : `Agent: ${data.answer} (Source: ${data.sources})`;
+        try {
+            const response = await fetch("/get_answer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: queuedQuestion.text }) });
+            if (!response.ok) throw new Error(`Server responded with ${response.status}`);
+            const data = await response.json();
+            const noEvidence = "I don't have enough evidence to answer that.";
+            loadingBubble.classList.remove("loading");
+            loadingBubble.textContent = data.answer === noEvidence
+                ? `Agent: ${data.answer}`
+                : `Agent: ${data.answer} (Source: ${data.sources})`;
+        } catch (err) {
+            loadingBubble.classList.remove("loading");
+            loadingBubble.textContent = "Agent: Something went wrong answering that. Please try again.";
+        }
     }
     isProcessing = false;
 }
@@ -104,8 +110,19 @@ const menuDrawer = document.getElementById("menu_drawer");
 const fileList = document.getElementById("file_list");
 
 async function loadFiles() {
-    const response = await fetch("/get_files");
-    const files = await response.json();
+    let files;
+    try {
+        const response = await fetch("/get_files");
+        if (!response.ok) throw new Error(`Server responded with ${response.status}`);
+        files = await response.json();
+    } catch (err) {
+        fileList.innerHTML = "";
+        const errorItem = document.createElement("li");
+        errorItem.className = "empty";
+        errorItem.textContent = "Couldn't load case files";
+        fileList.appendChild(errorItem);
+        return;
+    }
     fileList.innerHTML = "";
     if (files.length === 0) {
         const empty = document.createElement("li");
@@ -133,11 +150,20 @@ uploadForm.addEventListener("submit", async (e) => {
     data.append("file", file);
 
     uploadProgress.hidden = false;
-    await fetch("/ingest_file", { method: "POST", body: data });
-    uploadProgress.hidden = true;
-
-    uploadForm.reset();
-    loadFiles();
+    try {
+        const response = await fetch("/ingest_file", { method: "POST", body: data });
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            alert(error.detail || "Upload failed. Only .txt and .pdf files are supported.");
+            return;
+        }
+        uploadForm.reset();
+        loadFiles();
+    } catch (err) {
+        alert("Upload failed. Please check your connection and try again.");
+    } finally {
+        uploadProgress.hidden = true;
+    }
 });
 
 menuToggle.addEventListener("click", () => {

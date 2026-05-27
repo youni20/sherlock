@@ -35,7 +35,11 @@ async def upload_file(file: UploadFile = File(...)):
         content = await file.read()
         f.write(content)
 
-    embed_file(file.filename)
+    try:
+        embed_file(file.filename)
+    except Exception as e:
+        (DATA_COLLECTION / file.filename).unlink(missing_ok=True)  # don't keep a file we couldn't embed
+        raise HTTPException(status_code=502, detail=f"Could not process '{file.filename}'. The file was not added.") from e
 
     return {
         "filename": file.filename,
@@ -45,8 +49,11 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/get_answer")
 def get_answer(body: QuestionRequest) -> dict:
-    docs, retrieved_sources = retrieve_context_with_sources(vector_store=get_vector_store(), question=body.question)
-    raw: str = ask_question(body.question, docs)
+    try:
+        docs, retrieved_sources = retrieve_context_with_sources(vector_store=get_vector_store(), question=body.question)
+        raw: str = ask_question(body.question, docs)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail="Could not generate an answer right now. Please try again.") from e
 
     match = re.search(r"^SOURCES:\s*(.*)$", raw, re.MULTILINE)
     if match and match.group(1).strip().lower() != "none":
