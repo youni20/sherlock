@@ -2,9 +2,9 @@
 
 **A RAG assistant for a detective's case files — answers grounded in the evidence, never guesses.**
 
-Upload `.txt` or `.pdf` case files, then ask questions like *"What was Mrs. Hudson's alibi?"*. Sherlock answers only from what's in the files, cites its sources, and abstains rather than guessing:
+Upload `.txt` or `.pdf` case files, then ask questions like *"What was Mrs. Hudson's alibi?"*. Sherlock answers only from what's in the files, cites its sources, and abstains rather than guessing by saying:
 
-> I don't have enough evidence to answer that.
+"I don't have enough evidence to answer that."
 
 ---
 
