@@ -9,12 +9,16 @@ something up:
 
 > I don't have enough evidence to answer that.
 
+---
+
 ## What it does
 
 - **Upload case files** — `.txt` or `.pdf`, added to a searchable knowledge base
 - **Ask questions** — an LLM answers using RAG (retrieval-augmented generation) over your files
 - **Cites its sources** — every answer lists which case files it came from
 - **Knows when to stop** — abstains instead of guessing when the files don't hold the answer
+
+---
 
 ## Tech stack
 
@@ -23,13 +27,7 @@ something up:
 - **Frontend:** vanilla HTML, CSS, and JavaScript
 - **Infrastructure:** Docker + Docker Compose, with uv for dependency management
 
-## Architecture & Data Flow
-
-The diagram below traces a request end to end — the browser hits the FastAPI app,
-which runs the RAG pipeline (load → chunk → embed → store on ingest; retrieve →
-ground → generate on a question) and returns a sourced answer
-
-![Sherlock architecture and data-flow diagram](docs/diagrams/architecture_diagrams/Architecture_Diagram.png)
+---
 
 ## Getting started
 
@@ -70,6 +68,8 @@ uv sync
 uv run uvicorn main:app --app-dir src --port 8080 --reload
 ```
 
+---
+
 ## API endpoints
 
 | Method | Path            | Description                                |
@@ -88,6 +88,8 @@ curl -X POST http://localhost:8080/get_answer \
   -H "Content-Type: application/json" \
   -d '{"question": "What was Mrs. Hudson'\''s alibi?"}'
 ```
+
+---
 
 ## Tests
 
@@ -111,6 +113,8 @@ What's covered:
   right facts, and unanswerable ones return the exact abstention sentence
   *(integration)*
 
+---
+
 ## How answers stay grounded
 
 Grounding is enforced entirely by the system prompt. Sherlock:
@@ -123,6 +127,18 @@ Grounding is enforced entirely by the system prompt. Sherlock:
 Gemini's safety filters are set to `BLOCK_NONE` so it can discuss crime details in
 the case files; grounding comes from the prompt, not the filter. Models used:
 `gemini-embedding-001` (embeddings) and `gemini-2.5-flash-lite` (answers).
+
+---
+
+## Architecture & Data Flow
+
+The diagram below traces a request end to end — the browser hits the FastAPI app,
+which runs the RAG pipeline (load → chunk → embed → store on ingest; retrieve →
+ground → generate on a question) and returns a sourced answer
+
+![Sherlock architecture and data-flow diagram](docs/diagrams/architecture_diagrams/white_architecture_diagram.png)
+
+---
 
 ## Further reading
 
